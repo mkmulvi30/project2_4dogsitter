@@ -7,16 +7,17 @@ input.onButtonPressed(Button.A, function () {
 input.onButtonPressed(Button.B, function () {
     on = 0
     DogatDoor = 0
+    dogonMat = 0
+    pins.digitalWritePin(DigitalPin.P1, 0)
+    pins.digitalWritePin(DigitalPin.P2, 0)
 })
 basic.forever(function () {
     while (on == 1) {
-        dogonMat = pins.analogReadPin(AnalogPin.P0)
-        basic.showNumber(pins.analogReadPin(AnalogPin.P0))
         DogatDoor = 0
+        dogonMat = pins.analogReadPin(AnalogPin.P0)
         if (dogonMat > 500) {
             DogatDoor += 1
-            for (let index = 0; index < 2; index++) {
-                music.playTone(262, music.beat(BeatFraction.Double))
+            while (DogatDoor == 1) {
                 basic.showLeds(`
                     # . . . .
                     # . . # #
@@ -24,11 +25,20 @@ basic.forever(function () {
                     . # # # .
                     # . . . #
                     `)
-                basic.pause(1000)
-                basic.clearScreen()
+                basic.pause(200)
+                pins.digitalWritePin(DigitalPin.P1, 1)
+                basic.pause(200)
+                pins.digitalWritePin(DigitalPin.P1, 0)
+                basic.pause(200)
+                pins.digitalWritePin(DigitalPin.P2, 1)
+                basic.pause(200)
+                pins.digitalWritePin(DigitalPin.P2, 0)
+                basic.pause(200)
             }
+            basic.pause(200)
+            basic.clearScreen()
         } else {
-            basic.showString("System Armed")
+            basic.showString("Armed")
         }
     }
 })
